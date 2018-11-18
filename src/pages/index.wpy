@@ -1,0 +1,176 @@
+<style lang="less">
+.container {
+  height: 100%;
+  .title-help {
+    padding: 0 10px 0 20px;
+    color: rgb(54, 52, 52);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .title {
+      font-size: 1.5rem;
+      text-shadow: 3px 3px 2px rgb(70, 97, 146); // 字体阴影
+      //x轴(X Offset) y轴(Y Offset) 模糊半径(Blur) 颜色(Color)
+      flex: 2;
+    }
+    .help-music {
+      display: flex;
+      align-items: center; // 垂直居中
+      .music,
+      .help {
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 50%;
+      }
+    }
+  }
+  .grid {
+    background: rgb(219, 219, 179);
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid black;
+    .grid-row {
+      width: 100%;
+      // 关于 border-box 可以学习 https://developer.mozilla.org/zh-CN/docs/Web/CSS/box-sizing
+      box-sizing: border-box; //这样 给个 padding值之后，内外边框就不会 重叠
+      //padding: 2px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around; // 文本框水平居中
+      align-items: center; // 文本框垂直居中
+      text-align: center; // 文本 水平居中
+      margin: 0 0.1% 0 0.1%;
+      &:nth-child(1),
+      &:nth-child(4),
+      &:nth-child(7) {
+        border-top: 2px solid rgb(40, 12, 165);
+        /* border-top-width: 2px; */
+      }
+      &:last-child {
+        border-bottom: 2px solid rgb(40, 12, 165);
+      }
+      .grid-col {
+        width: 10%;
+        //height: calc(~'width'); // 注意如果这样一直不成功，要去看看 元素是否是行内元素，没有高度属性
+        // 但是 究竟 less 中是怎么使用这个公式的？
+        height: 36px;
+        line-height: 36px;
+        border: 1px outset rgb(72, 72, 116); // outset 外凸  inset 内凸
+        // 关于 border-box 可以学习 https://developer.mozilla.org/zh-CN/docs/Web/CSS/box-sizing
+        //box-sizing: border-box; //这样 给个 padding值之后，内外边框就不会 重叠
+        //padding: 2px;
+        &:nth-child(1),
+        &:nth-child(4),
+        &:nth-child(7) {
+          border-left: 2px solid rgb(40, 12, 165);
+        }
+        &:last-child {
+          border-right: 1px solid rgb(40, 12, 165);
+        }
+      }
+    }
+  }
+}
+.liBkgCor {
+  background-color: red;
+}
+</style>
+<template>
+  <view class="container">
+    <view class='title-help'>
+      <view class='title'>游戏关卡</view>
+      <view class="help-music" @tap="handleViewTap">
+        <view class="music">
+          <!-- &#xe602; 这个图标有问题，制作者没看效果就传上来 -->
+          <i class="iconfont" style="font-size:30px">&#xe990;</i>
+        </view>
+        <view class="help">
+          <i class="iconfont" style="font-size:30px">&#xe603;</i>
+        </view>
+      </view>
+    </view>
+    <view class='grid'>
+      <!--  :class=' {{ (index % 3==0)?' boder-left ':' ' }}' 
+      :class="(index % 3==0)?' boder-top ':' '''' -->
+      <view class='grid-row' wx:for-items="{{grids}}" wx:for-index="index" wx:for-item="items" wx:key="index">
+        <view class='grid-col' wx:for-items="{{items}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+         <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+    <!--     <view class="t_tab">
+      <li @tap.stop="changeLi({{1}})" class="{{ liColor == 1 ? 'liBkgCor':'' }}">推荐</li>
+      <li @tap.stop="changeLi({{2}})" class="{{ liColor == 2 ? 'liBkgCor':'' }}">洗手台</li>
+      <li @tap.stop="changeLi({{3}})" class="{{ liColor == 3 ? 'liBkgCor':'' }}">淋浴</li>
+      <li @tap.stop="changeLi({{4}})" class="{{ liColor == 4 ? 'liBkgCor':'' }}">马桶</li>
+    </view> -->
+    <view class='number-panel'>
+      
+    </view>
+    <view class='number-panel'>
+
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux' // 连接组件
+import Panel from '@/components/panel' // alias example
+import Counter from 'counter' // alias example ？？这里是引来哪里的？
+import List from '../components/list' // aliasFields example
+import moduleA from 'module-a' // aliasFields ignore module example？？这里是引来哪里的？
+import Group from '../components/group'
+import Toast from 'wepy-com-toast'
+import testMixin from '../mixins/test'
+
+console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
+
+// 连接组件
+@connect({
+  num(state) {
+    return state.counter.num
+  },
+  asyncNum(state) {
+    return state.counter.asyncNum
+  },
+  sumNum(state) {
+    return state.counter.num + state.counter.asyncNum
+  }
+})
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: ''
+  };
+  components = {
+    panel: Panel,
+    counter1: Counter,
+    counter2: Counter,
+    list: List,
+    group: Group,
+    toast: Toast
+  };
+
+  mixins = [testMixin];
+
+  data = {
+    grids: [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 2, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+  };
+  methods = {
+    changeLi(e) {
+      /*  this.liColor = e.target.dataset.wepyParamsA
+      this.$apply()  // 通知wepy框架data数据更改需要重绘页面 */
+    }
+  };
+}
+</script>

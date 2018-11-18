@@ -1,0 +1,28 @@
+// 阿里图标项目中 生成如下代码
+
+//第一步：拷贝项目下面生成的 font-face 每次链接都是不一样呀的，每次重新生成
+@font-face {
+  font-family: 'iconfont';  /* project id 922431 */
+  src: url('//at.alicdn.com/t/font_922431_hyefuy2dwu.eot');
+  src: url('//at.alicdn.com/t/font_922431_hyefuy2dwu.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_922431_hyefuy2dwu.woff') format('woff'),
+  url('//at.alicdn.com/t/font_922431_hyefuy2dwu.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_922431_hyefuy2dwu.svg#iconfont') format('svg');
+}
+
+//第二步：定义使用 iconfont 的样式，这个可以不需要改变
+.iconfont {
+  font-size: 16px;
+  color: rgb(45, 132, 167);
+  font-style: normal;
+  font-family: 'iconfont' !important;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 第三步：在页面使用之前，先把这个文件，引入到全局 app.wpy 中  （这是小程序中特有的）
+//<style lang="scss" src="./assets/styles/iconfont.scss"></style>
+
+// 第四步：在页面使用
+//<i class="iconfont" style="font-size:30px">&#xe625;</i>

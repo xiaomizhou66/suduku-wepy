@@ -1,0 +1,136 @@
+<style lang="less" src="./assets/styles/iconfont.less"></style>
+<style lang="less">
+page {
+  height: 100%;
+}
+.container {
+  height: 100%;
+  background: #8f4545;
+  /*   display: flex;
+  flex-direction: column; // 不是不会继承么？为什么 app,wepy 写了会影响 pages 页面
+  align-items: center; // 垂直居中
+  justify-content: space-between;
+  box-sizing: border-box; */
+}
+</style>
+
+<script>
+import wepy from 'wepy' // 从依赖包导入 wepy
+import 'wepy-async-function' // 从依赖包导入 wepy 异步函数，
+// 如果在页面开发中需要用到 async/await 的话，需要在 app.wpy 中使用
+// import 'wepy-async-function'加载模块，不然在编译后页面会报错，导致 async/await 无法使用。
+
+import { setStore } from 'wepy-redux' // 从依赖包导入 wepy-redux 状态管理器
+import configStore from './store' //  从 store 仓库 导入 wepy-redux 状态管理器 对象 命名 configStore
+
+// 在 app.wpy 中初始化 store  会在其他的 .wpy 文件上使用 store
+const store = configStore() // 调用 状态管理器对象 configStore 的函数 configStore()  返回值赋值给 store
+setStore(store) // set!!  设置初始化 store
+
+export default class extends wepy.app {
+  // 全局配置
+  // 在原生 MINA 框架下键值需要 引号， 在 wepy 这里不需要
+  config = {
+    // 页面路由配置
+    pages: ['pages/index', 'pages/ranking', 'pages/grid'],
+    // 页面导航栏配置
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#8f4545',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    },
+    // 页面底部栏配置
+    tabBar: {
+      color: '#AEADAD',
+      selectedColor: '#049BFF',
+      backgroundColor: '#fff',
+      borderStyle: 'black',
+      list: [
+        {
+          pagePath: 'pages/index',
+          text: '游戏'
+          // iconPath: '',
+          // selectedIconPath: ''
+        },
+        {
+          pagePath: 'pages/ranking',
+          text: '排名'
+        }
+      ]
+    }
+  };
+
+  // 全局属性/参数（方便后期各页面中的使用）
+  globalData = {
+    userInfo: null
+  };
+
+  // 构造函数
+  constructor() {
+    super() // 一定要在使用 this 之前
+    // super 可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。
+    // super（参数）：调用父类中的某一个构造函数（应该为构造函数中的第一条语句）。
+    // this（参数）：调用本类中另一种形式的构造函数（应该为构造函数中的第一条语句）。
+    // 学习网址：https://www.cnblogs.com/hasse/p/5023392.html
+    this.use('requestfix') // 修复小程序请求并发问题。
+    // this.use('promisify'); 使用wepy.xxx的方式请求小程序原生API都将Promise化。
+    // 设置拦截器，intercept 为拦截器函数
+    /*  this.intercept('request', {
+      config (p) {
+        p.timestamp = +new Date()
+        return p
+      },
+      success (obj) {
+        console.log('request success')
+      }
+    }) */
+  }
+
+  // 页面加载
+  onLaunch() {
+    this.testAsync()
+  }
+
+  // ？？？
+  sleep(s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  // 异步函数
+  async testAsync() {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  // 全局方法（方便后期各页面中的使用）
+  getUserInfo(cb) {
+    const that = this // 保存 当前环境 this 实例
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+      //  typeof cb == "function" && cb(this.globalData.userInfo) ？？？
+    }
+    // 用户授权，
+    // MINA: wx.getUserInfo
+    // wepy: wepy.getUserInfo  这里与外层的  getUserInfo  不一样的，外层只是命名，
+    // 这里的是 wepy 中的 API
+    // 获取 wx.getUserInfo 接口后续将不再出现授权弹窗，请注意升级
+    // 学习网址：https://developers.weixin.qq.com/community/develop/doc/0000a26e1aca6012e896a517556c01
+    wepy.getUserInfo({
+      // 调用登录接口,// 这里会跳出弹框，获取用户信息
+      success(res) {
+        that.globalData.userInfo = res.userInfo // 获取用户信息，赋给全局变量
+        cb && cb(res.userInfo) // ？？？？？？ 这里是什么意思
+        // typeof cb == "function" && cb(that.globalData.userInfo) 网上这段又是什么意思？？
+      },
+      fail() {
+        //
+      }
+    })
+  }
+}
+</script>
