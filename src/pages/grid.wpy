@@ -1,143 +1,334 @@
 <style lang="less">
 .container {
   height: 100%;
-  .title-help {
+  position: relative;
+  .title {
     padding: 0 10px 0 20px;
     color: rgb(54, 52, 52);
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    .title {
-      font-size: 1.5rem;
-      text-shadow: 3px 3px 2px rgb(70, 97, 146); // 字体阴影
-      //x轴(X Offset) y轴(Y Offset) 模糊半径(Blur) 颜色(Color)
+    justify-content: space-around; // 子元素框 在 父元素中水平对齐方式
+    align-items: center; //子元素在父容器中垂直居中
+    .pause-play {
+      flex: 1;
+    }
+    .level {
       flex: 2;
     }
-    .help-music {
-      display: flex;
-      align-items: center; // 垂直居中
-      .music,
-      .help {
-        width: 80rpx;
-        height: 80rpx;
-        border-radius: 50%;
-      }
+    .time {
+      flex: 3;
+    }
+    .music,
+    .help {
+      flex: 1;
     }
   }
   .grid {
     background: rgb(219, 219, 179);
     margin: 5px;
-    padding: 5px;
+    padding: 5px 0;
     border: 1px solid black;
+    border-radius: 5px;
     .grid-row {
       width: 100%;
       // 关于 border-box 可以学习 https://developer.mozilla.org/zh-CN/docs/Web/CSS/box-sizing
-      box-sizing: border-box; //这样 给个 padding值之后，内外边框就不会 重叠
+      //box-sizing: border-box; //这样 给个 padding值之后，内外边框就不会 重叠
       //padding: 2px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-around; // 文本框水平居中
+      justify-content: center; // 文本框水平居中
       align-items: center; // 文本框垂直居中
       text-align: center; // 文本 水平居中
       margin: 0 0.1% 0 0.1%;
-      &:nth-child(1),
+      /* &:nth-child(1),
       &:nth-child(4),
       &:nth-child(7) {
-        border-top: 2px solid rgb(40, 12, 165);
-        /* border-top-width: 2px; */
+        border-top: 2px solid rgb(40, 12, 165);// 2px 是边框宽度
+      } 
+      或者用 index 来在 html 中动态控制 class 如下 .grid-row-index*/
+      &.grid-row-index {
+        > .grid-col {
+          // 要写 .grid-row-index > .grid-col 也就是 .grid-row-index 的直接子元素 .grid-col
+          // 如果直接 .grid-row-index 边框就是行的边框，这样线会比里面格子的长的。
+          border-top: 2px solid rgb(40, 12, 165);
+        }
       }
       &:last-child {
-        border-bottom: 2px solid rgb(40, 12, 165);
+        > .grid-col {
+          border-bottom: 3px solid rgb(40, 12, 165);
+        }
       }
       .grid-col {
         width: 10%;
         //height: calc(~'width'); // 注意如果这样一直不成功，要去看看 元素是否是行内元素，没有高度属性
         // 但是 究竟 less 中是怎么使用这个公式的？
-        height: 36px;
-        line-height: 36px;
-        border: 1px outset rgb(72, 72, 116); // outset 外凸  inset 内凸
+        height: ~'10vw';
+        line-height: ~'10vw';
+        text-align: center;
+        border: 1px outset rgb(125, 125, 126); // outset 外凸  inset 内凸
         // 关于 border-box 可以学习 https://developer.mozilla.org/zh-CN/docs/Web/CSS/box-sizing
         //box-sizing: border-box; //这样 给个 padding值之后，内外边框就不会 重叠
         //padding: 2px;
-        &:nth-child(1),
+        /*  &:nth-child(1),
         &:nth-child(4),
         &:nth-child(7) {
           border-left: 2px solid rgb(40, 12, 165);
+        } */
+        .fixed {
+          background: rgb(146, 141, 141);
+        }
+        .empty {
+          color: rgb(219, 219, 179); // 当数字 为 0 时，文本颜色为背景色
+        }
+        .current {
+          background: rgb(153, 206, 93);
+          color: rgb(153, 206, 93);
+        }
+        .mark {
+          background: rgb(223, 120, 214);
+          font-size: 10px;
+        }
+        .filled {
+          color: rgb(54, 52, 52);
+        }
+        &.grid-col-index {
+          border-left: 2px solid rgb(40, 12, 165);
         }
         &:last-child {
-          border-right: 1px solid rgb(40, 12, 165);
+          border-right: 3px solid rgb(40, 12, 165);
+        }
+      }
+    }
+  }
+  .number-panels {
+    width: 100%;
+    font-size: 1rem; // 无效？
+    font-size: 28rpx;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    .number-panel {
+      text-align: center;
+      width: 15%;
+      height: 30px;
+      line-height: 30px;
+      margin: 5px;
+      border: 1px outset #fff;
+      border-radius: 10px;
+      background: #dbddbc;
+      &.current {
+        background: rgb(
+          153,
+          206,
+          93
+        ) !important; // 手机调试的时候怎么没有变色呢？
+        border-radius: 10px;
+      }
+      &.mark {
+        background: rgb(223, 120, 214) !important;
+      }
+    }
+  }
+  .oparation-panels {
+    width: 100%;
+    font-size: 1rem; // 无效？
+    font-size: 28rpx;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .oparation-panel {
+      text-align: center;
+      width: 15%;
+      height: 30px;
+      line-height: 30px;
+      margin: 5px;
+      border: 1px outset #fff;
+      border-radius: 10px;
+      background: #7ea4c7;
+      &.noneArray {
+        background: #b2b2b9;
+      }
+    }
+  }
+  .mask {
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: rgba(119, 139, 177, 0.8);
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .mask-box {
+      width: 70%;
+      height: 25%; //text-shadow: 3px 3px 2px rgb(70, 97, 146); // 字体阴影
+      display: flex;
+      justify-content: space-around;
+      align-content: center;
+      background: rgb(219, 219, 179);
+      border: 1px solid black;
+      border-radius: 25px;
+      flex-direction: column;
+      .box-title {
+        width: 100%;
+        text-align: center;
+      }
+      .box-image {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        .menu-btn,
+        .rebuild-btn,
+        .play-btn {
+          display: flex;
+          flex-direction: column;
         }
       }
     }
   }
 }
-.liBkgCor {
-  background-color: red;
-}
 </style>
 <template>
   <view class="container">
-    <view class='title-help'>
-      <view class='title'>游戏关卡</view>
-      <view class="help-music" @tap="handleViewTap">
-        <view class="music">
-          <!-- &#xe602; 这个图标有问题，制作者没看效果就传上来 -->
-          <i class="iconfont" style="font-size:30px">&#xe990;</i>
-        </view>
-        <view class="help">
-          <i class="iconfont" style="font-size:30px">&#xe603;</i>
-        </view>
+    <view class='title'>
+      <!--  <view class='pause-play' wx:if="{{isplay}}" @tap='pause'>
+        <i class="iconfont" style="font-size:30px">&#xe60f;</i>
+      </view>
+      <view class='pause-play' wx:else @tap='play'>
+        <i class="iconfont" style="font-size:30px">&#xe604;</i>
+      </view> -->
+      <view class='pause-play' @tap='pause'>
+        <i class="iconfont" style="font-size:30px">&#xe60f;</i>
+      </view>
+
+      <!-- 关卡-用时 -->
+      <view class='level'>关卡 {{level}} </view>
+      <view class='time'>{{newUseTime}}</view>
+
+      <!-- 音乐按钮 -->
+      <view class="music">
+        <i class="iconfont" style="font-size:30px">&#xe990;</i>
+      </view>
+
+      <!-- 帮助按钮 -->
+      <view class="help" @tap='helpTap'>
+        <i class="iconfont" style="font-size:30px">&#xe603;</i>
       </view>
     </view>
+
+    <!-- 九宫格 -->
     <view class='grid'>
-      <!--  :class=' {{ (index % 3==0)?' boder-left ':' ' }}' 
-      :class="(index % 3==0)?' boder-top ':' '''' -->
-      <view class='grid-row' wx:for-items="{{grids}}" wx:for-index="index" wx:for-item="items" wx:key="index">
-        <view class='grid-col' wx:for-items="{{items}}" wx:for-index="index" wx:for-item="item" wx:key="index">
-         <text>{{item}}</text>
+      <view class="grid-row {{rowIndex % 3 == 0 ? 'grid-row-index' : ''}}" wx:for-items="{{grids}}" wx:for-index="rowIndex" wx:for-item="items" wx:key="rowIndex">
+        <view @tap="fillNumber({{rowIndex}},{{colIndex}})" disabled='{{!isplay}}' class="grid-col {{colIndex % 3 == 0 ? 'grid-col-index' : ''}}" wx:for-items="{{items}}" wx:for-index="colIndex" wx:for-item="item" wx:key="colIndex">
+          <!--<view class="fixed" wx:if="{{item}}">{{item}}</view>
+          <view wx:else >{{empty}}</view>
+          这里的 for 循环渲染，又用 if 两条句子不对!!!!! 下面这条怎么加样式都是错的，试了多次发现，循环中只能有一条
+          class="{{currentCell.currentCellRowIndex==rowIndex&&currentCell.currentCellColIndex==colIndex?currentClass:''}}" -->
+          <view class="{{constGrids[rowIndex][colIndex]?'fixed':!grids[rowIndex][colIndex]?'empty':grids[rowIndex][colIndex]>9?'mark':'filled'}} {{currentCell.currentCellRowIndex==rowIndex&&currentCell.currentCellColIndex==colIndex && !constGrids[rowIndex][colIndex]?'current':''}}">{{item}}</view>
+          <!-- <view></view> -->
         </view>
       </view>
     </view>
-    <!--     <view class="t_tab">
-      <li @tap.stop="changeLi({{1}})" class="{{ liColor == 1 ? 'liBkgCor':'' }}">推荐</li>
-      <li @tap.stop="changeLi({{2}})" class="{{ liColor == 2 ? 'liBkgCor':'' }}">洗手台</li>
-      <li @tap.stop="changeLi({{3}})" class="{{ liColor == 3 ? 'liBkgCor':'' }}">淋浴</li>
-      <li @tap.stop="changeLi({{4}})" class="{{ liColor == 4 ? 'liBkgCor':'' }}">马桶</li>
+
+    <!-- <view class='grid'>
+      <view @tap='fillNumber({{index}})' wx:for-items="{{indexArrays}}" wx:for-index="index" wx:for-item="indexArray" wx:key="index">
+        <view class="grid-rows {{indexArray.i % 3 == 0 ? 'grid-row-indexs' : ''}} {{indexArray.j % 3 == 0 ? 'grid-col-indexs' : ''}}" >
+          <text >{{grids[indexArray.i][indexArray.j]}}</text>
+        </view>
+      </view>
     </view> -->
-    <view class='number-panel'>
-      <view class='numbers' wx:for-items="{{numbers}}" wx:for-index="index" wx:for-item="number" wx:key="index">
+    <!-- <view class='grid'>
+      <repeat for="{{grids}}" key="rowIndex" index="rowIndex" item="items">
+        <repeat for="{{items}}" key="colIndex" index="colIndex" item="item">
+          <view class="grid-row {{rowIndex % 3 == 0 ? 'grid-row-index' : ''}}">
+            <view class="grid-col {{colIndex % 3 == 0 ? 'grid-col-index' : ''}}">
+              <view class="fixed" wx:if="{{item}}">{{item}}</view>
+              <view  @tab="fillNumber({{rowIndex}},{{colIndex}})" wx:else></view>
+            </view>
+          </view>
+        </repeat>
+      </repeat>
+    </view> -->
+
+    <!-- 数字按钮 -->
+    <view class='number-panels'>
+      <view class="number-panel {{currentNumber.numberIndex == index?'current':''}}" @tap="tapNumber({{index}})" wx:for-items="{{numbers}}" wx:for-index="index" wx:for-item="number" wx:key="index">
         <text>{{number}}</text>
       </view>
+      <view class="number-panel  {{isMark?'mark':''}}" @tap='beMark'>
+        <i class="iconfont" style="font-size:20px;">&#xe606;</i>标记
+      </view>
     </view>
-    <view class='oparation-panel'>
 
+    <!-- 操作按钮 -->
+    <view class='oparation-panels'>
+      <view class="oparation-panel {{!fillArrayLen?'noneArray':''}}" @tap='goBack'>
+        <i class="iconfont" style="font-size:20px;">&#xe60b;</i>撤销
+      </view>
+      <view class="oparation-panel {{!delArrayLen?'noneArray':''}}" @tap='goForward'>
+        <i class="iconfont" style="font-size:20px;">&#xe837;</i>前进
+      </view>
+      <view class='oparation-panel' @tap='rebuild'>
+        <i class="iconfont" style="font-size:20px">&#xe620;</i>重玩
+      </view>
+      <view class='oparation-panel' @tap='del'>
+        <i class="iconfont" style="font-size:20px;">&#xe638;</i>删除
+      </view>
     </view>
+
+    <!-- 弹出层设置 -->
+    <view class="mask" wx:if='{{!isplay}}'>
+      <view class='mask-box'>
+        <view class='box-title'>
+          暂停
+        </view>
+        <view class='box-image'>
+          <view class='menu-btn' @tap='goToMenu'>
+            <i class="iconfont" style="font-size:30px">&#xe601;</i>
+            <text>菜单</text>
+          </view>
+          <view class='rebuild-btn' @tap='rebuild'>
+            <i class="iconfont" style="font-size:30px">&#xe620;</i>
+            <text>重玩</text>
+          </view>
+          <view class='play-btn' @tap='play'>
+            <i class="iconfont" style="font-size:30px">&#xe604;</i>
+            <text>继续</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import { connect } from 'wepy-redux' // 连接组件
-import Panel from '@/components/panel' // alias example
-import Counter from 'counter' // alias example ？？这里是引来哪里的？
-import List from '../components/list' // aliasFields example
-import moduleA from 'module-a' // aliasFields ignore module example？？这里是引来哪里的？
-import Group from '../components/group'
-import Toast from 'wepy-com-toast'
-import testMixin from '../mixins/test'
+import wepy from 'wepy';
+import { connect } from 'wepy-redux'; // 连接组件
+import Panel from '@/components/panel'; // alias example
+import Counter from 'counter'; // alias example ？？这里是引来哪里的？
+import List from '../components/list'; // aliasFields example
+import moduleA from 'module-a'; // aliasFields ignore module example？？这里是引来哪里的？
+import Group from '../components/group';
+import Toast from 'wepy-com-toast';
+import testMixin from '../mixins/test';
+import util from '../utils/util'; // 或者var util= require('../utils/util.js')
 
-console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
+console.log('moduleA ignored: ', moduleA); // => moduleA ignored: {}
 
 // 连接组件
 @connect({
   num(state) {
-    return state.counter.num
+    return state.counter.num;
   },
   asyncNum(state) {
-    return state.counter.asyncNum
+    return state.counter.asyncNum;
   },
   sumNum(state) {
-    return state.counter.num + state.counter.asyncNum
+    return state.counter.num + state.counter.asyncNum;
   }
 })
 export default class Index extends wepy.page {
@@ -156,24 +347,265 @@ export default class Index extends wepy.page {
   mixins = [testMixin];
 
   data = {
+    isplay: true,
     numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    level: 0,
+    useTime: 0,
     grids: [
+      [3, 0, 0, 0, 0, 0, 9, 0, 0],
+      [0, 0, 0, 0, 8, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 9, 0, 0, 0],
+      [0, 8, 5, 0, 0, 0, 2, 0, 0],
+      [0, 0, 9, 3, 0, 4, 7, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 2, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
+      [8, 0, 0, 7, 0, 0, 0, 1, 0],
+      [0, 2, 0, 0, 5, 0, 0, 8, 0],
+      [4, 0, 0, 0, 0, 0, 3, 0, 0]
+    ],
+    constGrids: [],
+    fillArray: [],
+    delArray: [],
+    currentNumber: {
+      numberIndex: null
+    },
+    isMark: false,
+    currentCell: {
+      currentCellRowIndex: null,
+      currentCellColIndex: null
+    },
+    intervalId: null
   };
-  methods = {
-    changeLi(e) {
-      /*  this.liColor = e.target.dataset.wepyParamsA
-      this.$apply()  // 通知wepy框架data数据更改需要重绘页面 */
+  computed = {
+    newUseTime() {
+      return util.formatTime(this.useTime);
+    },
+    fillArrayLen() {
+      return this.fillArray.length;
+    },
+    delArrayLen() {
+      return this.delArray.length;
     }
   };
+  /* parseIndex() {
+    let indexArrays = [];
+    for (let index = 0; index < 81; index++) {
+      let i = parseInt(index / 9);
+      let j = index % 9;
+      indexArrays.push({ i: i, j: j });
+    }
+    return indexArrays;
+  } */
+  watch = {
+    /* currentCell(newValue, oldValue) {
+      //console.log(`num value: ${oldValue} -> ${newValue}`);
+    } */
+  };
+  methods = {
+    pause() {
+      this.isplay = false;
+      //this.$apply();
+      clearInterval(this.intervalId);
+    },
+    play() {
+      this.isplay = true;
+      this.setIntervalFunc();
+    },
+    rebuild() {
+      this.grids = this.constGrids.map(v => v.map(value => value)); //按理不应该是原来的游戏的，应该重新的后台申请新的数据
+      this.isplay = true;
+      //this.$apply();
+      //this.currentCell = null; 不能这样，这样，因为  currentCell 是个有 内外 index 的对象，
+      // 直接这样，data 就不知道里面有 什么，要分别的置空，就像data 中有什么属性就给什么。
+      this.currentCell.currentCellRowIndex = null;
+      this.currentCell.currentCellColIndex = null;
+      this.useTime = 0;
+    },
+    goToMenu() {
+      wepy.navigateBack({
+        delta: 1
+        // 之前点击这里没有用，是因为 app.wepy 中把 grid.wpy 作为首页来调试了，页面换回去就对了
+      });
+    },
+    helpTap() {
+      wepy.navigateTo({
+        url: `./help`
+      });
+    },
+    fillNumber(rowIndex, colIndex) {
+      if (this.constGrids[rowIndex][colIndex] == 0) {
+        this.currentCell.currentCellRowIndex = rowIndex;
+        this.currentCell.currentCellColIndex = colIndex;
+      } else {
+        this.currentCell.currentCellRowIndex = null;
+        this.currentCell.currentCellColIndex = null;
+      }
+    },
+    //  fillNumber 事件与  tapNumber 事件 之前的填值
+    // 之前一直想着怎么在一个事件发生 又去执行另外一个事件，
+    // 做不到这样的，这里也可看到其实就是借助一个中间变量，
+    // 点击九宫格的时候将 当前点击的格子保存在一个变量中，
+    // 在  tapNumber 事件，点击数字， 九宫格中有 当前格子就赋值，就是这样关联起来的!!!!!!!!!!!重点！重点！
+    tapNumber(index) {
+      this.currentNumber.numberIndex = index;
+      //console.log(this.numbers[`${index}`]);
+      let rowIndex = this.currentCell.currentCellRowIndex;
+      let colIndex = this.currentCell.currentCellColIndex;
+      // if (rowIndex >= 0 && colIndex >= 0) {
+      //  Cannot set property 'null' of undefined
+      // 当没有当前点击的格子的时候，值为 null 与 数值 0 比较是会报错的，
+      if (rowIndex != null && colIndex != null) {
+        if (!this.isMark) {
+          if (this.grids[rowIndex][colIndex]) {
+            this.fillArray.pop();
+          }
+          this.grids[rowIndex][colIndex] = index + 1;
+        } else {
+          if (this.grids[rowIndex][colIndex]) {
+            this.grids[rowIndex][colIndex] = parseInt(
+              `${index + 1}` + this.grids[rowIndex][colIndex]
+            );
+          } else {
+            //this.grids[rowIndex][colIndex] = `${index + 1}`;
+            this.grids[rowIndex][colIndex] = parseInt(`${index + 1}` + '0');
+          }
+        }
+        let obj = {
+          rowIndex: rowIndex,
+          colIndex: colIndex,
+          value: this.grids[rowIndex][colIndex]
+        };
+        this.fillArray.push(obj);
+        this.delArray = [];
+      }
+    },
+    beMark() {
+      if (this.isMark) {
+        this.isMark = false;
+      } else {
+        this.isMark = true;
+      }
+    },
+    //返回
+    goBack() {
+      let backCellObj = this.fillArray.pop();
+      if (backCellObj) {
+        let rowIndex = backCellObj.rowIndex;
+        let colIndex = backCellObj.colIndex;
+        this.grids[rowIndex][colIndex] = 0;
+        this.currentCell.currentCellRowIndex = rowIndex;
+        this.currentCell.currentCellColIndex = colIndex;
+        this.delArray.push(backCellObj);
+        //this.$apply()
+        //console.log(this.currentCell.currentCellRowIndex,this.currentCell.currentCellColIndex)
+        // 发现不对了就 console.log()来检查啊！这里是拼写错误了 colIndex，rowIndex 老是错啊！！！！！
+      }
+    },
+    //前进
+    goForward() {
+      let forwardCellObj = this.delArray.pop();
+      if (forwardCellObj) {
+        let rowIndex = forwardCellObj.rowIndex;
+        let colIndex = forwardCellObj.colIndex;
+        let value = forwardCellObj.value;
+        this.currentCell.currentCellRowIndex = rowIndex;
+        this.currentCell.currentCellColIndex = colIndex;
+        this.grids[rowIndex][colIndex] = value;
+        this.fillArray.push(forwardCellObj);
+        console.log(this.fillArray);
+      }
+    },
+    // 删除指定格子
+    del() {
+      if (
+        this.currentCell.currentCellRowIndex &&
+        this.currentCell.currentCellColIndex
+      ) {
+        let rowIndex = this.currentCell.currentCellRowIndex;
+        //let colIndex = this.currentCell.currentCellColIndex;
+        // 真的是马马虎虎，不知道自己写的啥！！！！！多了个 F 字母不知道 么！！！！！
+        // 还检查了很久很久，浪费时间，哇！！！！！！真的是！！！！！！
+        let colIndex = this.currentCell.currentCellColIndex;
+        let value = this.grids[rowIndex][colIndex];
+        this.grids[rowIndex][colIndex] = 0;
+        if (value) {
+          let obj = {
+            rowIndex: rowIndex,
+            colIndex: colIndex,
+            value: value
+          };
+          this.removeObjWithArr(obj);
+          this.delArray.push(obj);
+        }
+      }
+      /* if (rowIndex != null && colIndex != null) {    
+      } */
+    }
+  };
+  /*  events = {
+    'index-broadcast': (...args) => {
+      let $event = args[args.length - 1];
+      console.log(
+        `${this.$name} receive ${$event.name} from ${$event.source.$name}`
+      );
+    }
+  }; */
+  onLoad(options) {
+    this.$navigate('./help')
+    // 填入的数字都变成灰色的了
+    // 小程序获取 url 传值 options 就是 url 传过来的 参数集合对象
+    this.level = options.level;
+    //this.$apply(); 需要么？
+    this.constGrids = this.grids.map(v => v.map(value => value));
+    //this.$apply();需要么 ？
+  }
+  onReady() {
+    this.isplay = true;
+    this.$apply(); //这里需要这样么？ 这句话为什么会让样式都改变了？？？
+    // 有的时候看到样式变了，是因为编辑器的问题，再保存几遍文档重新看开发者工具又没有错误了
+  }
+  onShow() {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    this.setIntervalFunc();
+  }
+  setIntervalFunc() {
+    this.intervalId = setInterval(() => {
+      this.useTime++;
+      this.$apply();
+      // 在异步或者回调流程中改变数据时，需要手动调用$apply方法。
+      // 小程序中变更了数据之后一定要这样去更新数据，否则得不到数据
+    }, 1000);
+  }
+  //删除 fillArray 指定对象：
+  removeObjWithArr(obj) {
+    let len = this.fillArray.length;
+    for (let i = 0; i < len; i++) {
+      if (
+        this.fillArray[i].rowIndex == obj.rowIndex &&
+        this.fillArray[i].colIndex == obj.colIndex
+      ) {
+        this.fillArray.splice(i, 1); //删除下标为i的元素
+      }
+    }
+  }
+  /*   delZero(n){
+    let str=n.toString() //数字转字符串
+    str=str.map((v)=>{
+      if(v == 0){
+        v = ' '
+      }
+    })
+  } */
+  // 查看 格子是否修改过数据，数据 已经填充过 fillArray 数组了，修改的时候 需要替换掉
+  /*  isAlreadyFilled(arr, obj){
+    var len = arr.length;
+      for (var i = 0; i < len; i++) {
+        if (arr[i] == obj) {
+        return parseInt(i);
+      }
+    }
+    return -1;
+  } */
 }
 </script>

@@ -1,254 +1,186 @@
 <style lang="less">
-  .userinfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.container {
+  height: 100%;
+  .title {
+    height: 10%;
+    font-size: 30px;
+    color: rgb(206, 204, 111);
+    text-align: center;
+    text-shadow: 2px 3px 2px rgb(190, 133, 133);
+    margin: 5x;
   }
-
-  .userinfo-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
+  .question-anser {
+    height: 85%;
+    font-size: 25px;
+    color: rgb(20, 109, 68);
+    padding: 0 10px;
+    overflow: scroll;
+    .question {
+      font-size: 20px;
+      color: rgb(7, 88, 71);
+    }
+    .anser {
+      .anser-title {
+        color: rgb(127, 158, 70);
+        font-size: 16px;
+      }
+      .anser-text {
+        margin: 5px;
+        padding: 5px 10px;
+        font-family: '微软雅黑';
+        font-size: 12px;
+        color: rgb(20, 20, 20);
+        background: #dbddbc;
+        border-radius: 5px;
+        border: 2px outset #fff;
+      }
+      .image {
+        width: 100%;
+        height: ~'100vw';
+      }
+    }
   }
-
-  .userinfo-nickname {
-    color: #aaa;
-  }
+}
 </style>
-<template>
+<template lang="wxml" minapp='wepy'>
   <view class="container">
-    <view class="userinfo" @tap="handleViewTap">
-      <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
-      <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
+    <button @tap='test'>test</button>
+    <view class='title'>玩转数独</view>
+    <view class='question-anser'>
+     <!--  数独游戏如何玩 -->
+      <view class="question">1.传统数独</view>
+      <view class="anser">
+        <view class="anser-title">唯一解法</view>
+        <view class="anser-text">如果某行已填数字的单元格达到8个,那么该行剩余单元格能填的数字就只剩下那个还没出现过的数字；同理， 如果某列已填数字的单元格达到8个,那么该列剩余单元格能填的数字就只剩下那个还没出现过的数字；如果某九宫格已填数字的单元格达到8个,那么该九宫格剩余单元格能填的数字就只剩下那个还没出现过的数字。如图，观察D7-F9这个九宫格，我们发现除了E7单元格以外其余的八个单元格已经填入了1、2、3、4、6、7、8、9，还有5没有填写，所以5就应该填入E7单元格。这是九宫格唯一解法。    
+        </view>
+        <image src="" />
+        <view class="anser-title">基础摒弃法</view>
+        <view class="anser-text">如果某行中已经有了某一数字，则该行中的其他位置不可能再出现这一数字；如果某列中已经有了某一数字，则该列中的其他位置不可能再出现这一数字; 如果某区块中已经有了某一数字，则该区块中的其他位置不可能再出现这一数字。基础摒除法可以分为行摒除、列摒除和九宫格摒除。如图，观察第7列。由于B2单元格有数字1，所以行B其他所有单元格都不能填入1；由于F4单元格有数字1，所以行F其他所有单元格都不能填入1。这样第7列只有A7单元格能够填入数字1。所以A7单元格的答案是1。  
+        </view>
+        <image src="" />
+      </view>
+      <view class="question">2.X 数独</view>
+      <view class="anser">
+        <view class="anser-title">唯一解法</view>
+        <view class="anser-text">如果某行已填数字的单元格达到8个,那么该行剩余单元格能填的数字就只剩下那个还没出现过的数字；同理， 如果某列已填数字的单元格达到8个,那么该列剩余单元格能填的数字就只剩下那个还没出现过的数字；如果某九宫格已填数字的单元格达到8个,那么该九宫格剩余单元格能填的数字就只剩下那个还没出现过的数字。如图，观察D7-F9这个九宫格，我们发现除了E7单元格以外其余的八个单元格已经填入了1、2、3、4、6、7、8、9，还有5没有填写，所以5就应该填入E7单元格。这是九宫格唯一解法。    
+        </view>
+        <image src="" />
+        <view class="anser-title">基础摒弃法</view>
+        <view class="anser-text">如果某行中已经有了某一数字，则该行中的其他位置不可能再出现这一数字；如果某列中已经有了某一数字，则该列中的其他位置不可能再出现这一数字; 如果某区块中已经有了某一数字，则该区块中的其他位置不可能再出现这一数字。基础摒除法可以分为行摒除、列摒除和九宫格摒除。如图，观察第7列。由于B2单元格有数字1，所以行B其他所有单元格都不能填入1；由于F4单元格有数字1，所以行F其他所有单元格都不能填入1。这样第7列只有A7单元格能够填入数字1。所以A7单元格的答案是1。  
+        </view>
+        <image src="" />
+      </view>
+      <view class="question">3.超级数独</view>
+      <view class="anser">
+        <view class="anser-title">唯一解法</view>
+        <view class="anser-text">如果某行已填数字的单元格达到8个,那么该行剩余单元格能填的数字就只剩下那个还没出现过的数字；同理， 如果某列已填数字的单元格达到8个,那么该列剩余单元格能填的数字就只剩下那个还没出现过的数字；如果某九宫格已填数字的单元格达到8个,那么该九宫格剩余单元格能填的数字就只剩下那个还没出现过的数字。如图，观察D7-F9这个九宫格，我们发现除了E7单元格以外其余的八个单元格已经填入了1、2、3、4、6、7、8、9，还有5没有填写，所以5就应该填入E7单元格。这是九宫格唯一解法。    
+        </view>
+        <image src="" />
+        <view class="anser-title">基础摒弃法</view>
+        <view class="anser-text">如果某行中已经有了某一数字，则该行中的其他位置不可能再出现这一数字；如果某列中已经有了某一数字，则该列中的其他位置不可能再出现这一数字; 如果某区块中已经有了某一数字，则该区块中的其他位置不可能再出现这一数字。基础摒除法可以分为行摒除、列摒除和九宫格摒除。如图，观察第7列。由于B2单元格有数字1，所以行B其他所有单元格都不能填入1；由于F4单元格有数字1，所以行F其他所有单元格都不能填入1。这样第7列只有A7单元格能够填入数字1。所以A7单元格的答案是1。  
+        </view>
+        <image src="" />
+      </view>
+      <view class="question">4.拼图数独</view>
+      <view class="anser">
+        <view class="anser-title">唯一解法</view>
+        <view class="anser-text">如果某行已填数字的单元格达到8个,那么该行剩余单元格能填的数字就只剩下那个还没出现过的数字；同理， 如果某列已填数字的单元格达到8个,那么该列剩余单元格能填的数字就只剩下那个还没出现过的数字；如果某九宫格已填数字的单元格达到8个,那么该九宫格剩余单元格能填的数字就只剩下那个还没出现过的数字。如图，观察D7-F9这个九宫格，我们发现除了E7单元格以外其余的八个单元格已经填入了1、2、3、4、6、7、8、9，还有5没有填写，所以5就应该填入E7单元格。这是九宫格唯一解法。    
+        </view>
+        <image src="" />
+        <view class="anser-title">基础摒弃法</view>
+        <view class="anser-text">如果某行中已经有了某一数字，则该行中的其他位置不可能再出现这一数字；如果某列中已经有了某一数字，则该列中的其他位置不可能再出现这一数字; 如果某区块中已经有了某一数字，则该区块中的其他位置不可能再出现这一数字。基础摒除法可以分为行摒除、列摒除和九宫格摒除。如图，观察第7列。由于B2单元格有数字1，所以行B其他所有单元格都不能填入1；由于F4单元格有数字1，所以行F其他所有单元格都不能填入1。这样第7列只有A7单元格能够填入数字1。所以A7单元格的答案是1。  
+        </view>
+        <image src="" />
+      </view>
+      <view class="question">5.武士数独</view>
+      <view class="anser">
+        <view class="anser-title">唯一解法</view>
+        <view class="anser-text">如果某行已填数字的单元格达到8个,那么该行剩余单元格能填的数字就只剩下那个还没出现过的数字；同理， 如果某列已填数字的单元格达到8个,那么该列剩余单元格能填的数字就只剩下那个还没出现过的数字；如果某九宫格已填数字的单元格达到8个,那么该九宫格剩余单元格能填的数字就只剩下那个还没出现过的数字。如图，观察D7-F9这个九宫格，我们发现除了E7单元格以外其余的八个单元格已经填入了1、2、3、4、6、7、8、9，还有5没有填写，所以5就应该填入E7单元格。这是九宫格唯一解法。    
+        </view>
+        <image src="" />
+        <view class="anser-title">基础摒弃法</view>
+        <view class="anser-text">如果某行中已经有了某一数字，则该行中的其他位置不可能再出现这一数字；如果某列中已经有了某一数字，则该列中的其他位置不可能再出现这一数字; 如果某区块中已经有了某一数字，则该区块中的其他位置不可能再出现这一数字。基础摒除法可以分为行摒除、列摒除和九宫格摒除。如图，观察第7列。由于B2单元格有数字1，所以行B其他所有单元格都不能填入1；由于F4单元格有数字1，所以行F其他所有单元格都不能填入1。这样第7列只有A7单元格能够填入数字1。所以A7单元格的答案是1。  
+        </view>
+        <image src="" />
+      </view>
     </view>
 
-    <panel>
-      <view class="title" slot="title">测试数据绑定</view>
-
-      <text class="info">{{normalTitle}}</text>
-      <text class="info">{{setTimeoutTitle}}</text>
-      <text class="info">{{mixin}}</text>
-      <text class="info">{{mynum}}</text>
-      <text class="info">{{now}}</text>
-      <text class="info">{{num}}</text>
-      <text class="info">{{asyncNum}}</text>
-      <text class="info">{{sumNum}}</text>
-      <button @tap="plus('a')" size="mini">  +  </button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">其它测试</view>
-      <button @tap="toast" size="mini">第三方组件</button>
-      <button @tap="communicate" size="mini">组件通信</button>
-      <button @tap="tap" size="mini">混合TAP事件</button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试并发网络请求</view>
-      <view>返回结果: <text>{{netrst}}</text></view>
-      <button @tap="request" size="mini"> 点我发起10个请求 </button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试组件</view>
-
-      <text class="testcounter">计数组件1: </text>
-      <view class="counterview">
-        <counter1 @index-emit.user="counterEmit" />
-      </view>
-
-      <text class="testcounter">计数组件2: </text>
-
-      <view class="counterview">
-        <counter2 :num.sync="mynum"></counter2>
-      </view>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试组件Repeat</view>
-      <repeat for="" index="index" item="item" key="key">
-        <group :grouplist="item" :indexa="index"></group>
-      </repeat>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试列表</view>
-      <list></list>
-    </panel>
-
-    <toast />
+     <!-- <view class='question-anser'>
+      <view class="question">1.传统数独</view>
+      <view class="anser">
+        <view class="anser-title">唯一解法</view>
+        <view class="anser-text">如果某行已填数字的单元格达到8个,那么该行剩余单元格能填的数字就只剩下那个还没出现过的数字；同理， 如果某列已填数字的单元格达到8个,那么该列剩余单元格能填的数字就只剩下那个还没出现过的数字；如果某九宫格已填数字的单元格达到8个,那么该九宫格剩余单元格能填的数字就只剩下那个还没出现过的数字。如图，观察D7-F9这个九宫格，我们发现除了E7单元格以外其余的八个单元格已经填入了1、2、3、4、6、7、8、9，还有5没有填写，所以5就应该填入E7单元格。这是九宫格唯一解法。    
+        </view>
+        <image src="" />
+        <view class="anser-title">基础摒弃法</view>
+        <view class="anser-text">如果某行中已经有了某一数字，则该行中的其他位置不可能再出现这一数字；如果某列中已经有了某一数字，则该列中的其他位置不可能再出现这一数字; 如果某区块中已经有了某一数字，则该区块中的其他位置不可能再出现这一数字。基础摒除法可以分为行摒除、列摒除和九宫格摒除。如图，观察第7列。由于B2单元格有数字1，所以行B其他所有单元格都不能填入1；由于F4单元格有数字1，所以行F其他所有单元格都不能填入1。这样第7列只有A7单元格能够填入数字1。所以A7单元格的答案是1。  
+        </view>
+        <image src="" />
+      </view> -->
+      
+     
+    </view>
   </view>
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
-  import Panel from '@/components/panel' // alias example
-  import Counter from 'counter' // alias example
-  import List from '../components/list' // aliasFields example
-  import moduleA from 'module-a' // aliasFields ignore module example
-  import Group from '../components/group'
-  import Toast from 'wepy-com-toast'
-  import testMixin from '../mixins/test'
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import Panel from '@/components/panel'; // alias example
+import Counter from 'counter'; // alias example
+import List from '../components/list'; // aliasFields example
+import moduleA from 'module-a'; // aliasFields ignore module example
+import Group from '../components/group';
+import Toast from 'wepy-com-toast';
+import testMixin from '../mixins/test';
 
-  console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
+console.log('moduleA ignored: ', moduleA); // => moduleA ignored: {}
 
-  @connect({
-    num (state) {
-      return state.counter.num
-    },
-    asyncNum (state) {
-      return state.counter.asyncNum
-    },
-    sumNum (state) {
-      return state.counter.num + state.counter.asyncNum
-    }
-  })
-
-  export default class Index extends wepy.page {
-    config = {
-      navigationBarTitleText: ' '
-    }
-    components = {
-      panel: Panel,
-      counter1: Counter,
-      counter2: Counter,
-      list: List,
-      group: Group,
-      toast: Toast
-    }
-
-    mixins = [testMixin]
-
-    data = {
-      mynum: 20,
-      userInfo: {
-        nickName: '加载中...'
-      },
-      normalTitle: '原始标题',
-      setTimeoutTitle: '标题三秒后会被修改',
-      count: 0,
-      netrst: '',
-      groupList: [
-        {
-          id: 1,
-          name: '点击改变',
-          list: [
-            {
-              childid: '1.1',
-              childname: '子项，点我改变'
-            }, {
-              childid: '1.2',
-              childname: '子项，点我改变'
-            }, {
-              childid: '1.3',
-              childname: '子项，点我改变'
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: '点击改变',
-          list: [
-            {
-              childid: '2.1',
-              childname: '子项，点我改变'
-            }, {
-              childid: '2.2',
-              childname: '子项，点我改变'
-            }, {
-              childid: '2.3',
-              childname: '子项，点我改变'
-            }
-          ]
-        },
-        {
-          id: 3,
-          name: '点击改变',
-          list: [
-            {
-              childid: '3.1',
-              childname: '子项，点我改变'
-            }
-          ]
-        }
-      ]
-    }
-
-    computed = {
-      now () {
-        return +new Date()
-      }
-    }
-
-    methods = {
-      plus () {
-        this.mynum++
-      },
-      toast () {
-        let promise = this.$invoke('toast', 'show', {
-          title: '自定义标题',
-          img: 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png'
-        })
-
-        promise.then((d) => {
-          console.log('toast done')
-        })
-      },
-      tap () {
-        console.log('do noting from ' + this.$name)
-      },
-      communicate () {
-        console.log(this.$name + ' tap')
-
-        this.$invoke('counter2', 'minus', 45, 6)
-        this.$invoke('counter1', 'plus', 45, 6)
-
-        this.$broadcast('index-broadcast', 1, 3, 4)
-      },
-      request () {
-        let self = this
-        let i = 10
-        let map = ['MA==', 'MQo=', 'Mg==', 'Mw==', 'NA==', 'NQ==', 'Ng==', 'Nw==', 'OA==', 'OQ==']
-        while (i--) {
-          wepy.request({
-            url: 'https://www.madcoder.cn/tests/sleep.php?time=1&t=css&c=' + map[i] + '&i=' + i,
-            success: function (d) {
-              self.netrst += d.data + '.'
-              self.$apply()
-            }
-          })
-        }
-      },
-      counterEmit (...args) {
-        let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
-      }
-    }
-
-    events = {
-      'index-emit': (...args) => {
-        let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
-      }
-    }
-
-    onLoad() {
-      let self = this
-      this.$parent.getUserInfo(function (userInfo) {
-        if (userInfo) {
-          self.userInfo = userInfo
-        }
-        self.normalTitle = '标题已被修改'
-
-        self.setTimeoutTitle = '标题三秒后会被修改'
-        setTimeout(() => {
-          self.setTimeoutTitle = '到三秒了'
-          self.$apply()
-        }, 3000)
-
-        self.$apply()
-      })
-    }
+@connect({
+  num(state) {
+    return state.counter.num;
+  },
+  asyncNum(state) {
+    return state.counter.asyncNum;
+  },
+  sumNum(state) {
+    return state.counter.num + state.counter.asyncNum;
   }
+})
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: ' '
+  };
+  components = {
+    panel: Panel,
+    counter1: Counter,
+    counter2: Counter,
+    list: List,
+    group: Group,
+    toast: Toast
+  };
+
+  mixins = [testMixin];
+
+  data = {};
+
+  computed = {};
+
+  methods = {};
+
+  events = {};
+
+  onLoad() {}
+  methods = {
+    /* test() {
+      var pages = this.getCurrentPages();
+      console.log(pages)
+      var prevPage = pages[pages.length - 2];
+      console.log(prevPage)
+      prevPage.testTitle = 'newTestTitle';
+      this.$apply();
+      wepy.navigateBack({ delta: 1 });
+    } */
+  };
+}
 </script>

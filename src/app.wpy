@@ -15,24 +15,24 @@ page {
 </style>
 
 <script>
-import wepy from 'wepy' // 从依赖包导入 wepy
-import 'wepy-async-function' // 从依赖包导入 wepy 异步函数，
+import wepy from 'wepy'; // 从依赖包导入 wepy
+import 'wepy-async-function'; // 从依赖包导入 wepy 异步函数，
 // 如果在页面开发中需要用到 async/await 的话，需要在 app.wpy 中使用
 // import 'wepy-async-function'加载模块，不然在编译后页面会报错，导致 async/await 无法使用。
 
-import { setStore } from 'wepy-redux' // 从依赖包导入 wepy-redux 状态管理器
-import configStore from './store' //  从 store 仓库 导入 wepy-redux 状态管理器 对象 命名 configStore
+import { setStore } from 'wepy-redux'; // 从依赖包导入 wepy-redux 状态管理器
+import configStore from './store'; //  从 store 仓库 导入 wepy-redux 状态管理器 对象 命名 configStore
 
 // 在 app.wpy 中初始化 store  会在其他的 .wpy 文件上使用 store
-const store = configStore() // 调用 状态管理器对象 configStore 的函数 configStore()  返回值赋值给 store
-setStore(store) // set!!  设置初始化 store
+const store = configStore(); // 调用 状态管理器对象 configStore 的函数 configStore()  返回值赋值给 store
+setStore(store); // set!!  设置初始化 store
 
 export default class extends wepy.app {
   // 全局配置
   // 在原生 MINA 框架下键值需要 引号， 在 wepy 这里不需要
   config = {
     // 页面路由配置
-    pages: ['pages/index', 'pages/ranking', 'pages/grid'],
+    pages: ['pages/index', 'pages/grid', 'pages/ranking', 'pages/help'],
     // 页面导航栏配置
     window: {
       backgroundTextStyle: 'light',
@@ -58,25 +58,28 @@ export default class extends wepy.app {
           text: '排名'
         }
       ]
-    }
+    },
+    debug: true,
+    requiredBackgroundModes: ['audio']
   };
 
   // 全局属性/参数（方便后期各页面中的使用）
   globalData = {
     userInfo: null
+    /* xiaomi: 18 */
   };
 
   // 构造函数
   constructor() {
-    super() // 一定要在使用 this 之前
+    super(); // 一定要在使用 this 之前
     // super 可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。
     // super（参数）：调用父类中的某一个构造函数（应该为构造函数中的第一条语句）。
     // this（参数）：调用本类中另一种形式的构造函数（应该为构造函数中的第一条语句）。
     // 学习网址：https://www.cnblogs.com/hasse/p/5023392.html
-    this.use('requestfix') // 修复小程序请求并发问题。
+    this.use('requestfix'); // 修复小程序请求并发问题。
     // this.use('promisify'); 使用wepy.xxx的方式请求小程序原生API都将Promise化。
     // 设置拦截器，intercept 为拦截器函数
-    /*  this.intercept('request', {
+    /* this.intercept('request', {
       config (p) {
         p.timestamp = +new Date()
         return p
@@ -89,29 +92,32 @@ export default class extends wepy.app {
 
   // 页面加载
   onLaunch() {
-    this.testAsync()
+    this.testAsync();
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
   }
 
   // ？？？
   sleep(s) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
+        resolve('promise resolved');
+      }, s * 1000);
+    });
   }
 
   // 异步函数
   async testAsync() {
-    const data = await this.sleep(3)
-    console.log(data)
+    const data = await this.sleep(3);
+    console.log(data);
   }
 
   // 全局方法（方便后期各页面中的使用）
   getUserInfo(cb) {
-    const that = this // 保存 当前环境 this 实例
+    const that = this; // 保存 当前环境 this 实例
     if (this.globalData.userInfo) {
-      return this.globalData.userInfo
+      return this.globalData.userInfo;
       //  typeof cb == "function" && cb(this.globalData.userInfo) ？？？
     }
     // 用户授权，
@@ -123,14 +129,22 @@ export default class extends wepy.app {
     wepy.getUserInfo({
       // 调用登录接口,// 这里会跳出弹框，获取用户信息
       success(res) {
-        that.globalData.userInfo = res.userInfo // 获取用户信息，赋给全局变量
-        cb && cb(res.userInfo) // ？？？？？？ 这里是什么意思
+        that.globalData.userInfo = res.userInfo; // 获取用户信息，赋给全局变量
+        cb && cb(res.userInfo); // ？？？？？？ 这里是什么意思
         // typeof cb == "function" && cb(that.globalData.userInfo) 网上这段又是什么意思？？
       },
       fail() {
         //
       }
-    })
+    });
   }
+  /* toPageHelp() {*/
+    /* navigateTo:fail page "pages/pages/help" is not found
+    全局方法虽然写在这里，但是是在页面调用的，所以路径不需要./pages 会重复 */
+   /*  let urlStr = `./pages/help`;
+    wepy.navigateTo({
+      url: urlStr
+    });
+  } */ 
 }
 </script>
